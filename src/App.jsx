@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { ToastContainer } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -9,13 +9,14 @@ import Navbar from './components/ui/Navbar';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Login from './components/auth/Login';
-import Register from './components/auth/Register';
+import Register from './components/auth/Register.jsx';
 import Profile from './pages/Profile';
 import TicketList from './components/tickets/TicketList';
 import TicketForm from './components/tickets/TicketForm';
 import TicketDetail from './components/tickets/TicketDetail';
 import PrivateRoute from './components/auth/PrivateRoute';
 import AdminRoute from './components/auth/AdminRoute';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 
 const theme = createTheme({
   palette: {
@@ -52,7 +53,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Router>
-        <ToastContainer position="top-right" />
+        <Toaster position="top-right" />
       </ThemeProvider>
     </Provider>
   );
