@@ -81,38 +81,27 @@ export default function TicketForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(createTicketStart());
     
-    if (isEditMode) {
-      dispatch(updateTicketStart());
-      try {
-        const ticketRef = doc(db, 'tickets', id);
-        await updateDoc(ticketRef, {
-          ...formData,
-          updatedAt: new Date().toISOString()
-        });
-        dispatch(updateTicketSuccess({ id, ...formData }));
-        toast.success('Ticket updated successfully!');
-        navigate(`/tickets/${id}`);
-      } catch (error) {
-        dispatch(updateTicketFailure(error.message));
-        toast.error(error.message);
-      }
-    } else {
-      dispatch(createTicketStart());
-      try {
-        const docRef = await addDoc(collection(db, 'tickets'), {
-          ...formData,
-          userId: user.uid,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        });
-        dispatch(createTicketSuccess({ id: docRef.id, ...formData }));
-        toast.success('Ticket created successfully!');
-        navigate('/tickets');
-      } catch (error) {
-        dispatch(createTicketFailure(error.message));
-        toast.error(error.message);
-      }
+    try {
+      const docRef = await addDoc(collection(db, 'tickets'), {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        priority: formData.priority,
+        status: 'open', 
+        userId: user.uid,
+        userEmail: user.email,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      
+      dispatch(createTicketSuccess({ id: docRef.id, ...formData }));
+      toast.success('Ticket created successfully!');
+      navigate('/tickets'); 
+    } catch (error) {
+      dispatch(createTicketFailure(error.message));
+      toast.error(error.message);
     }
   };
 
